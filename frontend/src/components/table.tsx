@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../App.css";
 import TableChooser from "./tableChooser";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Form, Row } from "react-bootstrap";
 
 function Table() {
   const [content, setContent] = useState<any>([]);
@@ -15,7 +15,7 @@ function Table() {
     <>
       <TableChooser callback={setCurrentTable} />
       <p />
-      <Container>
+      <Container fluid>
         <Row>
           {content[0]
             ? Object.keys(content[0]).map((field) => (
@@ -23,7 +23,7 @@ function Table() {
                   <Row className="p-3">{field}</Row>
                   {content.map((v, i) => (
                     <Row key={i} className="p-3">
-                      {v[field] ? v[field] : "-"}
+                      <Form.Control type="text" value={v[field]}></Form.Control>
                     </Row>
                   ))}
                 </Col>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Form } from "react-bootstrap";
 import "../App.css";
 
 type Props = { callback: (table: string) => void };
@@ -13,13 +14,13 @@ function TableChooser({ callback }: Props) {
 
   return (
     <>
-      <select onChange={(e) => callback(e.target.value)}>
+      <Form.Select onChange={(e) => callback(e.target.value)}>
         {tables.map((table) => (
           <option value={table} key={table}>
             {table}
           </option>
         ))}
-      </select>
+      </Form.Select>
     </>
   );
 }
