@@ -92,12 +92,13 @@ async fn update_student(
 async fn delete_student(
     State(db): State<Pool<Postgres>>,
     Path(id): Path<i32>,
-) -> Result<StatusCode, (StatusCode, String)> {
-    sqlx::query!(r#"DELETE FROM student WHERE id = $1"#, id)
-        .execute(&db)
+) -> Result<(StatusCode, Json<Student>), (StatusCode, String)> {
+    let deleted_student = sqlx::query_as!(Student, r#"DELETE FROM student WHERE id = $1 
+    RETURNING id, name, lastname, surname, age, faculty_curriculum, "group", start_study_date, status as "status: _""#, id)
+        .fetch_one(&db)
         .await
         .wrap_err_with(|| eyre!("Unable to update student in database"))
         .map_err(internal_error)?;
 
-    Ok(StatusCode::OK)
+    Ok((StatusCode::OK, Json(deleted_student)))
 }
