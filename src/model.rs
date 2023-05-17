@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
 use sqlx::types::chrono::NaiveDate;
 
-#[derive(Serialize, Deserialize)]
+#[derive(sqlx::Type, Serialize, Deserialize, Debug)]
+#[sqlx(type_name = "book_status", rename_all = "snake_case")]
 pub enum BookStatus {
     Excellent,
     Good,
@@ -9,21 +10,22 @@ pub enum BookStatus {
     Unsatisfactory,
 }
 
-#[derive(sqlx::Type, Serialize, Deserialize)]
-#[sqlx(rename_all = "snake_case")]
+#[derive(sqlx::Type, Serialize, Deserialize, Debug)]
+#[sqlx(type_name = "student_status", rename_all = "snake_case")]
 pub enum StudentStatus {
     Graduated,
     Expelled,
     Moved,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(sqlx::Type, Serialize, Deserialize, Debug)]
+#[sqlx(type_name = "teacher_status", rename_all = "snake_case")]
 pub enum TeacherStatus {
     Fired,
     Moved,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Student {
     pub id: i32,
     pub name: String,
@@ -36,28 +38,28 @@ pub struct Student {
     pub status: Option<StudentStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Faculty {
     pub id: i32,
     pub name: String,
     pub letter: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Curriculum {
     pub id: i32,
     pub name: String,
     pub letter: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FacultyCurriculum {
     pub id: i32,
     pub faculty: i32,
     pub curriculum: i32,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Teacher {
     pub id: i32,
     pub name: String,
@@ -68,7 +70,7 @@ pub struct Teacher {
     pub status: Option<TeacherStatus>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Book {
     pub id: i32,
     pub title: String,
@@ -78,13 +80,13 @@ pub struct Book {
     pub student_access: bool,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Category {
     pub id: i32,
     pub name: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Author {
     pub id: i32,
     pub name: String,
@@ -93,7 +95,7 @@ pub struct Author {
     pub country: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct AuthorBook {
     pub id: i32,
     pub author_id: i32,
@@ -101,7 +103,7 @@ pub struct AuthorBook {
     pub num: i16,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Librarian {
     pub id: i32,
     pub name: String,
@@ -110,34 +112,34 @@ pub struct Librarian {
     pub age: i16,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Publisher {
     pub id: i32,
     pub name: String,
     pub country: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Country {
     pub code: String,
     pub name: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct StudentCard {
     pub id: i32,
     pub student: i32,
     pub issue_date: NaiveDate,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TeacherCard {
     pub id: i32,
     pub teacher: i32,
     pub issue_date: NaiveDate,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct StudentsBorrowing {
     pub id: i32,
     pub student_card: i32,
@@ -150,7 +152,7 @@ pub struct StudentsBorrowing {
     pub required_return_date: NaiveDate,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TeachersBorrowing {
     pub id: i32,
     pub teacher_card: i32,

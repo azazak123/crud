@@ -1,15 +1,10 @@
 use std::net::SocketAddr;
 
-use axum::{
-    http::{HeaderValue, StatusCode},
-    response::IntoResponse,
-    Json, Router,
-};
+use axum::{http::{Method, header}, Router};
 use color_eyre::{
     eyre::{eyre, Context},
     Result,
 };
-use serde::{Deserialize, Serialize};
 use sqlx::postgres::PgPoolOptions;
 use tower_http::cors::{Any, CorsLayer};
 
@@ -30,7 +25,10 @@ async fn main() -> Result<()> {
         .await
         .wrap_err_with(|| eyre!("Unable connect to database"))?;
 
-    let cors = CorsLayer::new().allow_origin(Any);
+    let cors = CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE])
+        .allow_headers([header::CONTENT_TYPE]);
 
     // build our application with a route
     let app = Router::new()
@@ -46,38 +44,4 @@ async fn main() -> Result<()> {
         .unwrap();
 
     Ok(())
-}
-
-// basic handler that responds with a static string
-async fn root() -> &'static str {
-    "Hello, World!"
-}
-
-async fn create_user(
-    // this argument tells axum to parse the request body
-    // as JSON into a `CreateUser` type
-    Json(payload): Json<CreateUser>,
-) -> impl IntoResponse {
-    // insert your application logic here
-    let user = User {
-        id: 1337,
-        username: payload.username,
-    };
-
-    // this will be converted into a JSON response
-    // with a status code of `201 Created`
-    (StatusCode::CREATED, Json(user))
-}
-
-// the input to our `create_user` handler
-#[derive(Deserialize)]
-struct CreateUser {
-    username: String,
-}
-
-// the output to our `create_user` handler
-#[derive(Serialize)]
-struct User {
-    id: u64,
-    username: String,
 }
