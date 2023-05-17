@@ -6,7 +6,7 @@ use color_eyre::{eyre::eyre, Result};
 use sqlx::{Pool, Postgres};
 
 use crate::error::internal_error;
-use crate::model::{Student, StudentStatus};
+use crate::model::Student;
 
 pub fn routes(db: Pool<Postgres>) -> Router {
     Router::new()
@@ -18,7 +18,7 @@ pub fn routes(db: Pool<Postgres>) -> Router {
 async fn get_students(
     State(db): State<Pool<Postgres>>,
 ) -> Result<(StatusCode, Json<Vec<Student>>), (StatusCode, String)> {
-    let students = sqlx::query_as!(Student, r#"SELECT id, name, lastname, surname, age, faculty_curriculum, "group", start_study_date, status as "status: StudentStatus" FROM student ORDER BY id ASC"#)
+    let students = sqlx::query_as!(Student, r#"SELECT id, name, lastname, surname, age, faculty_curriculum, "group", start_study_date, status as "status: _" FROM student ORDER BY id ASC"#)
         .fetch_all(&db)
         .await
         .wrap_err_with(|| eyre!("Unable to load students from database"))
@@ -31,10 +31,11 @@ async fn create_student(
     State(db): State<Pool<Postgres>>,
     Json(student): Json<Student>,
 ) -> Result<(StatusCode, Json<Student>), (StatusCode, String)> {
-    sqlx::query!(
+    let inserted_student = sqlx::query_as!(Student,
         r#"INSERT INTO student 
         (name, lastname, surname, age, faculty_curriculum, "group", start_study_date, status)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)"#,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        RETURNING id, name, lastname, surname, age, faculty_curriculum, "group", start_study_date, status as "status: _""#,
         student.name,
         student.lastname,
         student.surname,
@@ -44,12 +45,12 @@ async fn create_student(
         student.start_study_date,
         student.status as _
     )
-    .execute(&db)
+    .fetch_one(&db)
     .await
     .wrap_err_with(|| eyre!("Unable to add student to database"))
     .map_err(internal_error)?;
 
-    Ok((StatusCode::CREATED, Json(student)))
+    Ok((StatusCode::CREATED, Json(inserted_student)))
 }
 
 async fn update_student(
