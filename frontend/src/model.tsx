@@ -138,3 +138,63 @@ export type TeachersBorrowing = {
   borrow_date: Date;
   return_date: Date | null;
 };
+
+export type Entity =
+  | Student
+  | Faculty
+  | Curriculum
+  | FacultyCurriculum
+  | Teacher
+  | Book
+  | Category
+  | Author
+  | AuthorBook
+  | Librarian
+  | Publisher
+  | Country
+  | StudentCard
+  | TeacherCard
+  | StudentsBorrowing
+  | TeachersBorrowing;
+
+export const getKeys = Object.keys as <T extends object>(
+  obj: T
+) => Array<keyof T>;
+
+export type PrimaryKey<T extends Entity> = T extends {
+  id: NonNullable<unknown>;
+}
+  ? Extract<keyof T, "id">
+  : T extends Country
+  ? Extract<keyof T, "code">
+  : never;
+
+export type Table =
+  | "student"
+  | "faculty"
+  | "curriculum"
+  | "facultyCurriculum"
+  | "teacher"
+  | "book"
+  | "category"
+  | "author"
+  | "authorBook"
+  | "librarian"
+  | "publisher"
+  | "country"
+  | "studentCard"
+  | "teacherCard"
+  | "studentsBorrowing"
+  | "teachersBorrowing";
+
+export type TablePrimaryKey<T extends Table> = T extends "country"
+  ? "code"
+  : "id";
+
+export function tableToPrimaryKey<T extends Table>(
+  table: T
+): TablePrimaryKey<T> {
+  if (table === "country") return "code" as TablePrimaryKey<T>;
+
+  return "id" as TablePrimaryKey<T>;
+}

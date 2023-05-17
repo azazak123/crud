@@ -1,10 +1,10 @@
 import "./App.css";
-import Table from "./components/table";
+import EntityTable from "./components/entityTable";
 
 function App() {
   return (
     <>
-      <Table />
+      <EntityTable />
     </>
   );
 }
