@@ -24,7 +24,7 @@ export type Student = {
   age: number;
   faculty_curriculum: number;
   group: number;
-  start_study_date: Date;
+  start_study_date: string;
   status: StudentStatus | null;
 };
 
@@ -59,8 +59,8 @@ export type Teacher = {
 export type Book = {
   id: number;
   title: string;
-  release: Date;
-  lisher: number;
+  release: string;
+  publisher: number;
   category: number;
   student_access: boolean;
 };
@@ -107,13 +107,13 @@ export type Country = {
 export type StudentCard = {
   id: number;
   student: number;
-  issue_date: Date;
+  issue_date: string;
 };
 
 export type TeacherCard = {
   id: number;
   teacher: number;
-  issue_date: Date;
+  issue_date: string;
 };
 
 export type StudentsBorrowing = {
@@ -123,9 +123,9 @@ export type StudentsBorrowing = {
   book: number;
   book_status_start: BookStatus;
   book_status_finish: BookStatus | null;
-  borrow_date: Date;
-  return_date: Date | null;
-  required_return_date: Date;
+  borrow_date: string;
+  return_date: string | null;
+  required_return_date: string;
 };
 
 export type TeachersBorrowing = {
@@ -135,8 +135,8 @@ export type TeachersBorrowing = {
   book: number;
   book_status_start: BookStatus;
   book_status_finish: BookStatus | null;
-  borrow_date: Date;
-  return_date: Date | null;
+  borrow_date: string;
+  return_date: string | null;
 };
 
 export type Entity =
@@ -198,3 +198,113 @@ export function tableToPrimaryKey<T extends Table>(
 
   return "id" as TablePrimaryKey<T>;
 }
+
+export const defaultModel: Record<Table, Entity> = {
+  student: {
+    id: 0,
+    name: "",
+    lastname: "",
+    surname: "",
+    age: 0,
+    faculty_curriculum: 0,
+    group: 0,
+    start_study_date: new Date().toISOString().split("T")[0],
+    status: null,
+  },
+  faculty: {
+    id: 0,
+    name: "",
+    letter: "",
+  },
+  curriculum: {
+    id: 0,
+    name: "",
+    letter: "",
+  },
+  facultyCurriculum: {
+    id: 0,
+    faculty: 0,
+    curriculum: 0,
+  },
+  teacher: {
+    id: 0,
+    name: "",
+    lastname: "",
+    surname: "",
+    age: 0,
+    faculty: 0,
+    status: null,
+  },
+  book: {
+    id: 0,
+    title: "",
+    release: new Date().toISOString().split("T")[0],
+    publisher: 0,
+    category: 0,
+    student_access: false,
+  },
+  category: {
+    id: 0,
+    name: "",
+  },
+  author: {
+    id: 0,
+    name: "",
+    lastname: "",
+    surname: "",
+    country: "",
+  },
+  authorBook: {
+    id: 0,
+    author_id: 0,
+    book_id: 0,
+    num: 0,
+  },
+  librarian: {
+    id: 0,
+    name: "",
+    lastname: "",
+    surname: "",
+    age: 0,
+  },
+  publisher: {
+    id: 0,
+    name: "",
+    country: "",
+  },
+  country: {
+    code: "",
+    name: "",
+  },
+  studentCard: {
+    id: 0,
+    student: 0,
+    issue_date: new Date().toISOString().split("T")[0],
+  },
+  teacherCard: {
+    id: 0,
+    teacher: 0,
+    issue_date: new Date().toISOString().split("T")[0],
+  },
+  studentsBorrowing: {
+    id: 0,
+    student_card: 0,
+    librarian: 0,
+    book: 0,
+    book_status_start: BookStatus.Excellent,
+    book_status_finish: null,
+    borrow_date: new Date().toISOString().split("T")[0],
+    return_date: null,
+    required_return_date: new Date().toISOString().split("T")[0],
+  },
+  teachersBorrowing: {
+    id: 0,
+    teacher_card: 0,
+    librarian: 0,
+    book: 0,
+    book_status_start: BookStatus.Excellent,
+    book_status_finish: null,
+    borrow_date: new Date().toISOString().split("T")[0],
+    return_date: null,
+  },
+};

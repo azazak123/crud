@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import "../App.css";
 import TableChooser from "./tableChooser";
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import TableRow from "./tableRow";
-import { Entity, tableToPrimaryKey, Table as TableName } from "../model";
+import {
+  Entity,
+  tableToPrimaryKey,
+  Table as TableName,
+  defaultModel,
+} from "../model";
 
 function EntityTable() {
   const [content, setContent] = useState<Entity[]>([]);
   const [currentTable, setCurrentTable] = useState<TableName>("student");
+  const primaryKey = tableToPrimaryKey(currentTable);
 
   useEffect(() => {
     getContent(currentTable).then((content) => setContent(content));
@@ -20,7 +26,7 @@ function EntityTable() {
         <thead>
           <tr>
             {content[0]
-              ? Object.keys(content[0]).map((field) => (
+              ? Object.keys(defaultModel[currentTable]).map((field) => (
                   <th className="p-3" key={field}>
                     {field}
                   </th>
@@ -33,13 +39,23 @@ function EntityTable() {
           {content.map((entity, i) => (
             <TableRow
               table={currentTable}
-              primaryKey={tableToPrimaryKey(currentTable)}
+              primaryKey={primaryKey}
               key={i}
               entityInitial={entity}
             />
           ))}
         </tbody>
       </Table>
+      <div className="d-grid gap-2">
+        <Button
+          onClick={() => {
+            setContent([...content, defaultModel[currentTable]]);
+          }}
+          size="lg"
+        >
+          +
+        </Button>
+      </div>
     </>
   );
 }

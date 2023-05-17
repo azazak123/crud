@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import "../App.css";
 import { Entity, PrimaryKey, Table, getKeys } from "../model";
@@ -16,14 +16,6 @@ function TableRow<T extends Entity>({
 }: Props<T>) {
   const [entity, setEntity] = useState(entityInitial);
   const [isChanged, setChanged] = useState(false);
-  const [shouldUpdated, setShouldUpdated] = useState(false);
-
-  useEffect(() => {
-    update(table, primaryKey, entity).then((entity) => {
-      setEntity(entity), setChanged(false);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldUpdated]);
 
   return (
     <tr>
@@ -71,7 +63,13 @@ function TableRow<T extends Entity>({
           <Button
             variant="success"
             size="lg"
-            onClick={() => setShouldUpdated(true)}
+            onClick={() => {
+              if (entity[primaryKey] !== 0)
+                update(table, primaryKey, entity).then(setEntity);
+              else createContent(table, entity).then(setEntity);
+
+              setChanged(false);
+            }}
           ></Button>
         </td>
       ) : (
@@ -94,6 +92,21 @@ async function update<T extends Entity>(
       body: JSON.stringify(entity),
     }
   );
+
+  const data = await res.json();
+
+  return data as T;
+}
+
+async function createContent<T extends Entity>(
+  table: Table,
+  entity: T
+): Promise<T> {
+  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/${table}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entity),
+  });
 
   const data = await res.json();
 
