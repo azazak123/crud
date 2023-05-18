@@ -31,7 +31,13 @@ function TableRow<T extends Entity>({
           <Form.Control
             readOnly={field === primaryKey ? true : false}
             type="text"
-            value={entity[field] ? (entity[field] as string) : ""}
+            value={
+              entity[field] !== null &&
+              entity[field] !== undefined &&
+              (field !== primaryKey || entity[field] !== 0)
+                ? (entity[field] as string)
+                : ""
+            }
             onChange={(e) => {
               setChanged(true);
 
@@ -42,7 +48,9 @@ function TableRow<T extends Entity>({
                   val = BigInt(e.target.value);
                   break;
                 case "boolean":
-                  val = e.target.value as unknown as boolean;
+                  if (e.target.value === "true" || e.target.value === "false")
+                    val = e.target.value === "true";
+                  else val = e.target.value;
                   break;
                 case "number":
                   val = +e.target.value;
