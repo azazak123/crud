@@ -13,6 +13,7 @@ import {
 function EntityTable() {
   const [content, setContent] = useState<Entity[]>([]);
   const [currentTable, setCurrentTable] = useState<TableName>("student");
+  const [update, updateTable] = useState({});
   const primaryKey = tableToPrimaryKey(currentTable);
 
   useEffect(() => {
@@ -33,14 +34,17 @@ function EntityTable() {
                 ))
               : ""}
             <th className="p-3">{content[0] ? "Save" : ""}</th>
+            <th className="p-3">{content[0] ? "Delete" : ""}</th>
           </tr>
         </thead>
         <tbody>
           {content.map((entity, i) => (
             <TableRow
+              updateTable={() => updateTable({ ...update })}
               table={currentTable}
               primaryKey={primaryKey}
-              key={i}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              key={`${(entity as any)[primaryKey]} + ${i}`}
               entityInitial={entity}
             />
           ))}

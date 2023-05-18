@@ -7,18 +7,21 @@ type Props<T extends Entity> = {
   entityInitial: T;
   primaryKey: PrimaryKey<T>;
   table: Table;
+  updateTable: () => void;
 };
 
 function TableRow<T extends Entity>({
   entityInitial,
   primaryKey,
   table,
+  updateTable,
 }: Props<T>) {
   const [entity, setEntity] = useState(entityInitial);
   const [isChanged, setChanged] = useState(false);
+  const [isDeleted, setDeleted] = useState(false);
 
   return (
-    <tr>
+    <tr className={isDeleted ? "table-danger" : ""}>
       {getKeys(entity).map((field) => (
         <td key={field as string} className="p-3">
           <Form.Control
@@ -58,23 +61,42 @@ function TableRow<T extends Entity>({
           ></Form.Control>
         </td>
       ))}
-      {isChanged ? (
-        <td className="p-3">
+
+      <td className="p-3">
+        {isChanged ? (
           <Button
             variant="success"
             size="lg"
             onClick={() => {
-              if (entity[primaryKey] !== 0)
-                update(table, primaryKey, entity).then(setEntity);
-              else createContent(table, entity).then(setEntity);
+              if (entity[primaryKey] === 0)
+                createContent(table, entity).then(setEntity);
+              else if (isDeleted)
+                deleteContent(table, primaryKey, entity).then(updateTable);
+              else update(table, primaryKey, entity).then(setEntity);
 
               setChanged(false);
+              setDeleted(false);
             }}
           ></Button>
-        </td>
-      ) : (
-        ""
-      )}
+        ) : (
+          ""
+        )}
+      </td>
+
+      <td className="p-3">
+        {entity[primaryKey] !== 0 ? (
+          <Button
+            variant="danger"
+            size="lg"
+            onClick={() => {
+              setDeleted(true);
+              setChanged(true);
+            }}
+          ></Button>
+        ) : (
+          ""
+        )}
+      </td>
     </tr>
   );
 }
@@ -107,6 +129,24 @@ async function createContent<T extends Entity>(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(entity),
   });
+
+  const data = await res.json();
+
+  return data as T;
+}
+
+async function deleteContent<T extends Entity>(
+  table: Table,
+  primaryKey: PrimaryKey<T>,
+  entity: T
+) {
+  const res = await fetch(
+    `${import.meta.env.VITE_SERVER_URL}/${table}/${entity[primaryKey]}`,
+    {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 
   const data = await res.json();
 
