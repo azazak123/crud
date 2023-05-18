@@ -29,7 +29,13 @@ function TableRow<T extends Entity>({
       {getKeys(entity).map((field) => (
         <td key={field as string} className="p-3">
           <Form.Control
-            readOnly={field === primaryKey ? true : false}
+            readOnly={
+              field === primaryKey &&
+              table !== "curriculum" &&
+              table !== "country"
+                ? true
+                : false
+            }
             type="text"
             value={
               entity[field] !== null &&
