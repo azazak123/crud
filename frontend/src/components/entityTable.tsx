@@ -63,7 +63,9 @@ function EntityTable() {
 }
 
 async function getContent(table: TableName): Promise<Entity[]> {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/${table}`);
+  const res = await fetch(
+    `${import.meta.env.VITE_SERVER_URL}/${table.replaceAll("_", "-")}`
+  );
   const data = await res.json();
 
   return data;

@@ -126,11 +126,14 @@ async function createContent<T extends Entity>(
   table: Table,
   entity: T
 ): Promise<T> {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/${table}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(entity),
-  });
+  const res = await fetch(
+    `${import.meta.env.VITE_SERVER_URL}/${table.replaceAll("_", "-")}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(entity),
+    }
+  );
 
   const data = await res.json();
 
@@ -143,7 +146,9 @@ async function deleteContent<T extends Entity>(
   entity: T
 ) {
   const res = await fetch(
-    `${import.meta.env.VITE_SERVER_URL}/${table}/${entity[primaryKey]}`,
+    `${import.meta.env.VITE_SERVER_URL}/${table.replaceAll("_", "-")}/${
+      entity[primaryKey]
+    }`,
     {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
