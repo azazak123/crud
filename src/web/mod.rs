@@ -4,6 +4,7 @@ pub mod book;
 pub mod category;
 pub mod curriculum;
 pub mod faculty;
+pub mod faculty_curriculum;
 pub mod student;
 pub mod table;
 pub mod teacher;
