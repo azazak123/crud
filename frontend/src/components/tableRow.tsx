@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import "../App.css";
 import { Entity, PrimaryKey, Table, defaultModel, getKeys } from "../model";
@@ -19,6 +19,10 @@ function TableRow<T extends Entity>({
   const [entity, setEntity] = useState(entityInitial);
   const [isChanged, setChanged] = useState(false);
   const [isDeleted, setDeleted] = useState(false);
+
+  useEffect(() => {
+    setEntity(entityInitial);
+  }, [entityInitial]);
 
   return (
     <tr className={isDeleted ? "table-danger" : ""}>

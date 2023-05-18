@@ -1,6 +1,9 @@
 use std::net::SocketAddr;
 
-use axum::{http::{Method, header}, Router};
+use axum::{
+    http::{header, Method},
+    Router,
+};
 use color_eyre::{
     eyre::{eyre, Context},
     Result,
@@ -33,7 +36,8 @@ async fn main() -> Result<()> {
     // build our application with a route
     let app = Router::new()
         .merge(web::table::routes(db_pool.clone()))
-        .merge(web::student::routes(db_pool))
+        .merge(web::student::routes(db_pool.clone()))
+        .merge(web::author::routes(db_pool.clone()))
         .layer(cors);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
