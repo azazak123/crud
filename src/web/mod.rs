@@ -8,6 +8,7 @@ pub mod faculty_curriculum;
 pub mod librarian;
 pub mod publisher;
 pub mod student;
+pub mod student_card;
 pub mod table;
 pub mod teacher;
 pub mod teacher_card;
