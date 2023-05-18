@@ -1,19 +1,19 @@
 export enum BookStatus {
-  Excellent,
-  Good,
-  Satisfactory,
-  Unsatisfactory,
+  Excellent = "Excellent",
+  Good = "Good",
+  Satisfactory = "Satisfactory",
+  Unsatisfactory = "Unsatisfactory",
 }
 
 export enum StudentStatus {
-  Graduated,
-  Expelled,
-  Moved,
+  Graduated = "Graduated",
+  Expelled = "Expelled",
+  Moved = "Moved",
 }
 
 export enum TeacherStatus {
-  Fired,
-  Moved,
+  Fired = "Fired",
+  Moved = "Moved",
 }
 
 export type Student = {
@@ -209,7 +209,7 @@ export const defaultModel: Record<Table, Entity> = {
     faculty_curriculum: 0,
     group: 0,
     start_study_date: new Date().toISOString().split("T")[0],
-    status: null,
+    status: StudentStatus.Graduated,
   },
   faculty: {
     id: 0,
@@ -233,7 +233,7 @@ export const defaultModel: Record<Table, Entity> = {
     surname: "",
     age: 0,
     faculty: 0,
-    status: null,
+    status: TeacherStatus.Moved,
   },
   book: {
     id: 0,
@@ -292,9 +292,9 @@ export const defaultModel: Record<Table, Entity> = {
     librarian: 0,
     book: 0,
     book_status_start: BookStatus.Excellent,
-    book_status_finish: null,
+    book_status_finish: BookStatus.Excellent,
     borrow_date: new Date().toISOString().split("T")[0],
-    return_date: null,
+    return_date: new Date().toISOString().split("T")[0],
     required_return_date: new Date().toISOString().split("T")[0],
   },
   teachers_borrowing: {
@@ -303,8 +303,8 @@ export const defaultModel: Record<Table, Entity> = {
     librarian: 0,
     book: 0,
     book_status_start: BookStatus.Excellent,
-    book_status_finish: null,
+    book_status_finish: BookStatus.Excellent,
     borrow_date: new Date().toISOString().split("T")[0],
-    return_date: null,
+    return_date: new Date().toISOString().split("T")[0],
   },
 };

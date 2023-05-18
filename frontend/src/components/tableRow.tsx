@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import "../App.css";
-import { Entity, PrimaryKey, Table, getKeys } from "../model";
+import { Entity, PrimaryKey, Table, defaultModel, getKeys } from "../model";
 
 type Props<T extends Entity> = {
   entityInitial: T;
@@ -33,7 +33,7 @@ function TableRow<T extends Entity>({
 
               let val;
 
-              switch (typeof entity[field]) {
+              switch (typeof (defaultModel[table] as T)[field]) {
                 case "bigint":
                   val = BigInt(e.target.value);
                   break;
@@ -52,6 +52,8 @@ function TableRow<T extends Entity>({
                 default:
                   throw new Error("Unsupported type");
               }
+
+              if (e.target.value === "") val = null;
 
               setEntity({
                 ...entity,
