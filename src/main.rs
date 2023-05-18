@@ -47,6 +47,7 @@ async fn main() -> Result<()> {
         .merge(web::curriculum::routes(db_pool.clone()))
         .merge(web::faculty::routes(db_pool.clone()))
         .merge(web::faculty_curriculum::routes(db_pool.clone()))
+        .merge(web::publisher::routes(db_pool.clone()))
         .layer(cors);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));

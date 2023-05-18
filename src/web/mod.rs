@@ -10,3 +10,4 @@ pub mod table;
 pub mod teacher;
 pub mod teacher_card;
 pub mod teachers_borrowing;
+pub mod publisher;
