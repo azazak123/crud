@@ -9,6 +9,7 @@ pub mod librarian;
 pub mod publisher;
 pub mod student;
 pub mod student_card;
+pub mod students_borrowing;
 pub mod table;
 pub mod teacher;
 pub mod teacher_card;
