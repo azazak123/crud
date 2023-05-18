@@ -18,7 +18,7 @@ function EntityTable() {
 
   useEffect(() => {
     getContent(currentTable).then((content) => setContent(content));
-  }, [currentTable]);
+  }, [currentTable, update]);
 
   return (
     <>
