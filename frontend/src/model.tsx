@@ -173,19 +173,19 @@ export type Table =
   | "student"
   | "faculty"
   | "curriculum"
-  | "facultyCurriculum"
+  | "faculty_curriculum"
   | "teacher"
   | "book"
   | "category"
   | "author"
-  | "authorBook"
+  | "author_book"
   | "librarian"
   | "publisher"
   | "country"
-  | "studentCard"
-  | "teacherCard"
-  | "studentsBorrowing"
-  | "teachersBorrowing";
+  | "student_card"
+  | "teacher_card"
+  | "students_borrowing"
+  | "teachers_borrowing";
 
 export type TablePrimaryKey<T extends Table> = T extends "country"
   ? "code"
@@ -221,7 +221,7 @@ export const defaultModel: Record<Table, Entity> = {
     name: "",
     letter: "",
   },
-  facultyCurriculum: {
+  faculty_curriculum: {
     id: 0,
     faculty: 0,
     curriculum: 0,
@@ -254,7 +254,7 @@ export const defaultModel: Record<Table, Entity> = {
     surname: "",
     country: "",
   },
-  authorBook: {
+  author_book: {
     id: 0,
     author_id: 0,
     book_id: 0,
@@ -276,17 +276,17 @@ export const defaultModel: Record<Table, Entity> = {
     code: "",
     name: "",
   },
-  studentCard: {
+  student_card: {
     id: 0,
     student: 0,
     issue_date: new Date().toISOString().split("T")[0],
   },
-  teacherCard: {
+  teacher_card: {
     id: 0,
     teacher: 0,
     issue_date: new Date().toISOString().split("T")[0],
   },
-  studentsBorrowing: {
+  students_borrowing: {
     id: 0,
     student_card: 0,
     librarian: 0,
@@ -297,7 +297,7 @@ export const defaultModel: Record<Table, Entity> = {
     return_date: null,
     required_return_date: new Date().toISOString().split("T")[0],
   },
-  teachersBorrowing: {
+  teachers_borrowing: {
     id: 0,
     teacher_card: 0,
     librarian: 0,

@@ -3,9 +3,9 @@ import { Form } from "react-bootstrap";
 import "../App.css";
 import { Table } from "../model";
 
-type Props = { callback: (table: Table) => void };
+type Props = { callback: (table: Table) => void; defaultTable: Table };
 
-function TableChooser({ callback }: Props) {
+function TableChooser({ callback, defaultTable }: Props) {
   const [tables, setTables] = useState<Table[]>([]);
 
   useEffect(() => {
@@ -14,7 +14,10 @@ function TableChooser({ callback }: Props) {
 
   return (
     <>
-      <Form.Select onChange={(e) => callback(e.target.value as Table)}>
+      <Form.Select
+        value={defaultTable}
+        onChange={(e) => callback(e.target.value as Table)}
+      >
         {tables.map((table) => (
           <option value={table} key={table}>
             {table}

@@ -22,17 +22,15 @@ function EntityTable() {
 
   return (
     <>
-      <TableChooser callback={setCurrentTable} />
+      <TableChooser defaultTable={currentTable} callback={setCurrentTable} />
       <Table>
         <thead>
           <tr>
-            {content[0]
-              ? Object.keys(defaultModel[currentTable]).map((field) => (
-                  <th className="p-3" key={field}>
-                    {field}
-                  </th>
-                ))
-              : ""}
+            {Object.keys(defaultModel[currentTable]).map((field) => (
+              <th className="p-3" key={field}>
+                {field}
+              </th>
+            ))}
             <th className="p-3">{content[0] ? "Save" : ""}</th>
             <th className="p-3">{content[0] ? "Delete" : ""}</th>
           </tr>
