@@ -51,6 +51,7 @@ async fn main() -> Result<()> {
         .merge(web::librarian::routes(db_pool.clone()))
         .merge(web::student_card::routes(db_pool.clone()))
         .merge(web::students_borrowing::routes(db_pool.clone()))
+        .merge(web::country::routes(db_pool))
         .layer(cors);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));

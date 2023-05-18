@@ -2,6 +2,7 @@ pub mod author;
 pub mod author_book;
 pub mod book;
 pub mod category;
+pub mod country;
 pub mod curriculum;
 pub mod faculty;
 pub mod faculty_curriculum;
