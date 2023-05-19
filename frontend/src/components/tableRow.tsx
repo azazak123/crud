@@ -19,6 +19,7 @@ function TableRow<T extends Entity>({
   const [entity, setEntity] = useState(entityInitial);
   const [isChanged, setChanged] = useState(false);
   const [isDeleted, setDeleted] = useState(false);
+  const [oldPrimaryKey, setOldPrimaryKey] = useState(entityInitial[primaryKey]);
 
   useEffect(() => {
     setEntity(entityInitial);
@@ -88,14 +89,15 @@ function TableRow<T extends Entity>({
             variant="success"
             size="lg"
             onClick={() => {
-              if (entity[primaryKey] === 0)
+              if (oldPrimaryKey === 0 || oldPrimaryKey === "")
                 createContent(table, entity).then(setEntity);
               else if (isDeleted)
-                deleteContent(table, primaryKey, entity).then(updateTable);
-              else update(table, primaryKey, entity).then(setEntity);
+                deleteContent(table, oldPrimaryKey).then(updateTable);
+              else update(table, entity, oldPrimaryKey).then(setEntity);
 
               setChanged(false);
               setDeleted(false);
+              setOldPrimaryKey(entity[primaryKey]);
             }}
           ></Button>
         ) : (
@@ -123,11 +125,11 @@ function TableRow<T extends Entity>({
 
 async function update<T extends Entity>(
   table: Table,
-  primaryKey: PrimaryKey<T>,
-  entity: T
+  entity: T,
+  oldKey: T[PrimaryKey<T>]
 ) {
   const res = await fetch(
-    `${import.meta.env.VITE_SERVER_URL}/${table}/${entity[primaryKey]}`,
+    `${import.meta.env.VITE_SERVER_URL}/${table}/${oldKey}`,
     {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -160,13 +162,13 @@ async function createContent<T extends Entity>(
 
 async function deleteContent<T extends Entity>(
   table: Table,
-  primaryKey: PrimaryKey<T>,
-  entity: T
+  oldKey: T[PrimaryKey<T>]
 ) {
   const res = await fetch(
-    `${import.meta.env.VITE_SERVER_URL}/${table.replaceAll("_", "-")}/${
-      entity[primaryKey]
-    }`,
+    `${import.meta.env.VITE_SERVER_URL}/${table.replaceAll(
+      "_",
+      "-"
+    )}/${oldKey}`,
     {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
