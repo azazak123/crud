@@ -36,22 +36,7 @@ async fn main() -> Result<()> {
     // build our application with a route
     let app = Router::new()
         .merge(web::table::routes(db_pool.clone()))
-        .merge(web::student::routes(db_pool.clone()))
-        .merge(web::author::routes(db_pool.clone()))
-        .merge(web::book::routes(db_pool.clone()))
-        .merge(web::category::routes(db_pool.clone()))
-        .merge(web::author_book::routes(db_pool.clone()))
-        .merge(web::teachers_borrowing::routes(db_pool.clone()))
-        .merge(web::teacher_card::routes(db_pool.clone()))
-        .merge(web::teacher::routes(db_pool.clone()))
-        .merge(web::curriculum::routes(db_pool.clone()))
-        .merge(web::faculty::routes(db_pool.clone()))
-        .merge(web::faculty_curriculum::routes(db_pool.clone()))
-        .merge(web::publisher::routes(db_pool.clone()))
-        .merge(web::librarian::routes(db_pool.clone()))
-        .merge(web::student_card::routes(db_pool.clone()))
-        .merge(web::students_borrowing::routes(db_pool.clone()))
-        .merge(web::country::routes(db_pool))
+        .merge(web::crud_service::routes(db_pool.clone()))
         .layer(cors);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
