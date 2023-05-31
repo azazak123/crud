@@ -165,7 +165,7 @@ pub struct TeachersBorrowing {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct StudentWithGroup {
+pub struct StudentReadonly {
     pub id: i32,
     pub name: String,
     pub lastname: String,

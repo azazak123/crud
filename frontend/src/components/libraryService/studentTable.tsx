@@ -45,7 +45,7 @@ function StudentTable() {
 
 async function getStudents(): Promise<ReadonlyStudent[]> {
   const studentsRes = await fetch(
-    `${import.meta.env.VITE_SERVER_URL}/student-group`
+    `${import.meta.env.VITE_SERVER_URL}/student-readonly`
   );
   const students = (await studentsRes.json()) as ReadonlyStudent[];
 
