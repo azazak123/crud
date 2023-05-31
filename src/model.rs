@@ -175,3 +175,14 @@ pub struct StudentReadonly {
     pub start_study_date: NaiveDate,
     pub status: Option<StudentStatus>,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TeacherReadonly {
+    pub id: i32,
+    pub name: String,
+    pub lastname: String,
+    pub surname: String,
+    pub age: i16,
+    pub faculty: String,
+    pub status: Option<TeacherStatus>,
+}
