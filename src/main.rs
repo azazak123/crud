@@ -37,6 +37,7 @@ async fn main() -> Result<()> {
     let app = Router::new()
         .merge(web::table::routes(db_pool.clone()))
         .merge(web::crud_service::routes(db_pool.clone()))
+        .merge(web::library_service::routes(db_pool.clone()))
         .layer(cors);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
