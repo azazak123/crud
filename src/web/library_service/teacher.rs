@@ -26,7 +26,7 @@ async fn get_teachers(
     )
     .fetch_all(&db)
     .await
-    .wrap_err_with(|| eyre!("Unable to load students from database"))
+    .wrap_err_with(|| eyre!("Unable to load teachers from database"))
     .map_err(internal_error)?;
 
     Ok((StatusCode::OK, Json(teachers)))

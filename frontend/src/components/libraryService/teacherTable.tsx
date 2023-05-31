@@ -5,10 +5,10 @@ import { Table } from "react-bootstrap";
 type ReadonlyTeacher = Teacher & { faculty: string };
 
 function TeacherTable() {
-  const [students, setStudents] = useState<ReadonlyTeacher[]>([]);
+  const [teachers, setTeachers] = useState<ReadonlyTeacher[]>([]);
 
   useEffect(() => {
-    getStudents().then((students) => setStudents(students));
+    getTeachers().then((teachers) => setTeachers(teachers));
   }, []);
 
   return (
@@ -25,14 +25,14 @@ function TeacherTable() {
           </tr>
         </thead>
         <tbody>
-          {students.map((student, i) => (
+          {teachers.map((teacher, i) => (
             <tr key={i}>
-              <td className="p-3">{student.name}</td>
-              <td className="p-3">{student.lastname}</td>
-              <td className="p-3">{student.surname}</td>
-              <td className="p-3">{student.age}</td>
-              <td className="p-3">{student.faculty}</td>
-              <td className="p-3">{student.status}</td>
+              <td className="p-3">{teacher.name}</td>
+              <td className="p-3">{teacher.lastname}</td>
+              <td className="p-3">{teacher.surname}</td>
+              <td className="p-3">{teacher.age}</td>
+              <td className="p-3">{teacher.faculty}</td>
+              <td className="p-3">{teacher.status}</td>
             </tr>
           ))}
         </tbody>
@@ -41,7 +41,7 @@ function TeacherTable() {
   );
 }
 
-async function getStudents(): Promise<ReadonlyTeacher[]> {
+async function getTeachers(): Promise<ReadonlyTeacher[]> {
   const teachersRes = await fetch(
     `${import.meta.env.VITE_SERVER_URL}/teacher-readonly`
   );
