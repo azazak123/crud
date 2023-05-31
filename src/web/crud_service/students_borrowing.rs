@@ -24,7 +24,7 @@ pub fn routes(db: Pool<Postgres>) -> Router {
 async fn get_students_borrowings(
     State(db): State<Pool<Postgres>>,
 ) -> Result<(StatusCode, Json<Vec<StudentsBorrowing>>), (StatusCode, String)> {
-    let students_borrowings = sqlx::query_as!(StudentsBorrowing, 
+    let students_borrowings = sqlx::query_as!(StudentsBorrowing,
         r#"SELECT id, student_card, librarian, book,
         book_status_start as "book_status_start: _", book_status_finish as "book_status_finish: _", borrow_date, return_date, required_return_date
         FROM students_borrowing ORDER BY id ASC"#)

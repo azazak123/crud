@@ -104,7 +104,7 @@ async fn delete_teachers_borrowing(
     Path(id): Path<i32>,
 ) -> Result<(StatusCode, Json<TeachersBorrowing>), (StatusCode, String)> {
     let deleted_teachers_borrowing = sqlx::query_as!(
-        TeachersBorrowing, 
+        TeachersBorrowing,
         r#"DELETE FROM teachers_borrowing WHERE id = $1 
         RETURNING id, teacher_card, librarian, book,
         book_status_start as "book_status_start: _", book_status_finish as "book_status_finish: _", borrow_date, return_date"#, id)
