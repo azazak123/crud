@@ -186,3 +186,14 @@ pub struct TeacherReadonly {
     pub faculty: String,
     pub status: Option<TeacherStatus>,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct BookReadonly {
+    pub id: i32,
+    pub title: String,
+    pub release: NaiveDate,
+    pub publisher: String,
+    pub category: String,
+    pub student_access: bool,
+    pub authors: String,
+}
