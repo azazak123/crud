@@ -197,3 +197,11 @@ pub struct BookReadonly {
     pub student_access: bool,
     pub authors: String,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CardReadonly {
+    pub id: i32,
+    pub owner: String,
+    pub issue_date: NaiveDate,
+    pub is_teacher: bool,
+}

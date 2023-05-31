@@ -6,6 +6,7 @@ import { Tab, Tabs } from "react-bootstrap";
 import StudentTable from "./libraryService/studentTable";
 import TeacherTable from "./libraryService/teacherTable";
 import BookTable from "./libraryService/bookTable";
+import CardTable from "./libraryService/cardTable";
 
 function LibraryService() {
   const [librarian, setLibrarian] = useState<Librarian>();
@@ -28,7 +29,9 @@ function LibraryService() {
         <Tab eventKey="books" title="Books">
           <BookTable />
         </Tab>
-        <Tab eventKey="cards" title="Cards"></Tab>
+        <Tab eventKey="cards" title="Cards">
+          <CardTable />
+        </Tab>
       </Tabs>
     </>
   );
