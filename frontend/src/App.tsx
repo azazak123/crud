@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./App.css";
 import EntityTable from "./components/entityTable";
 import LibraryService from "./components/libraryService";
