@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { TeacherCard } from "../../model";
 import { Table } from "react-bootstrap";
+import BorrowingWindow from "./borrowingWindow";
 
 type ReadonlyCard = Omit<TeacherCard, "teacher"> & {
   owner: string;
@@ -9,6 +10,7 @@ type ReadonlyCard = Omit<TeacherCard, "teacher"> & {
 
 function CardTable() {
   const [cards, setCards] = useState<ReadonlyCard[]>([]);
+  const [card, setCard] = useState<ReadonlyCard | null>(null);
 
   useEffect(() => {
     getCards().then((cards) => setCards(cards));
@@ -16,6 +18,17 @@ function CardTable() {
 
   return (
     <>
+      {card ? (
+        <BorrowingWindow
+          card={card.id}
+          isTeacher={card.is_teacher}
+          showInitial={true}
+          owner={card.owner}
+          closeWindow={() => setCard(null)}
+        />
+      ) : (
+        ""
+      )}
       <Table>
         <thead>
           <tr>
@@ -26,7 +39,12 @@ function CardTable() {
         </thead>
         <tbody>
           {cards.map((card, i) => (
-            <tr key={i}>
+            <tr
+              onClick={() => {
+                setCard(card);
+              }}
+              key={i}
+            >
               <td className="p-3">{card.owner}</td>
               <td className="p-3">{card.issue_date}</td>
               <td className="p-3">{card.is_teacher.toString()}</td>

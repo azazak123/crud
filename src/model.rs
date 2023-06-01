@@ -205,3 +205,19 @@ pub struct CardReadonly {
     pub issue_date: NaiveDate,
     pub is_teacher: bool,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct BorrowingReadonly {
+    pub id: i32,
+    pub owner: String,
+    pub card: i32,
+    pub librarian: i32,
+    pub librarian_name: String,
+    pub book: i32,
+    pub book_title: String,
+    pub book_status_start: BookStatus,
+    pub book_status_finish: Option<BookStatus>,
+    pub borrow_date: NaiveDate,
+    pub return_date: Option<NaiveDate>,
+    pub required_return_date: Option<NaiveDate>,
+}
