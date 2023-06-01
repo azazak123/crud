@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TeacherCard } from "../../model";
+import { Librarian, TeacherCard } from "../../model";
 import { Table } from "react-bootstrap";
 import BorrowingWindow from "./borrowingWindow";
 
@@ -8,7 +8,9 @@ type ReadonlyCard = Omit<TeacherCard, "teacher"> & {
   is_teacher: boolean;
 };
 
-function CardTable() {
+type Props = { librarian: Librarian };
+
+function CardTable({ librarian }: Props) {
   const [cards, setCards] = useState<ReadonlyCard[]>([]);
   const [card, setCard] = useState<ReadonlyCard | null>(null);
 
@@ -25,6 +27,7 @@ function CardTable() {
           showInitial={true}
           owner={card.owner}
           closeWindow={() => setCard(null)}
+          librarian={librarian}
         />
       ) : (
         ""

@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
-import { BookStatus, TeachersBorrowing } from "../../model";
-import { Button, Dropdown, Modal, Table } from "react-bootstrap";
+import { Book, BookStatus, Librarian, TeachersBorrowing } from "../../model";
+import {
+  Button,
+  Col,
+  Container,
+  Dropdown,
+  Form,
+  Modal,
+  Row,
+  Table,
+} from "react-bootstrap";
 
 type ReadonlyBorrowing = Omit<TeachersBorrowing, "teacher_card"> & {
   owner: string;
@@ -16,6 +25,7 @@ type Props = {
   isTeacher: boolean;
   owner: string;
   closeWindow: () => void;
+  librarian: Librarian;
 };
 
 function BorrowingWindow({
@@ -24,9 +34,21 @@ function BorrowingWindow({
   isTeacher,
   owner,
   closeWindow,
+  librarian,
 }: Props) {
   const [borrowings, setBorrowings] = useState<ReadonlyBorrowing[]>([]);
   const [show, setShow] = useState(showInitial);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [newBorrowing, setNewBorrowing] = useState<Partial<ReadonlyBorrowing>>(
+    isTeacher
+      ? {
+          book_status_start: BookStatus.Excellent,
+        }
+      : {
+          book_status_start: BookStatus.Excellent,
+          required_return_date: new Date().toISOString().split("T")[0],
+        }
+  );
   const [update, setUpdate] = useState({});
 
   useEffect(() => setShow(showInitial), [showInitial]);
@@ -35,6 +57,10 @@ function BorrowingWindow({
     getBorrowings(isTeacher, card).then((borrowings) =>
       setBorrowings(borrowings)
     );
+  }, [isTeacher, card, update]);
+
+  useEffect(() => {
+    getBooks().then((books) => setBooks(books));
   }, [isTeacher, card, update]);
 
   return (
@@ -129,6 +155,84 @@ function BorrowingWindow({
               ))}
             </tbody>
           </Table>
+
+          <Container>
+            <Row>
+              <Col>
+                {" "}
+                <Form.Select
+                  onChange={(e) =>
+                    setNewBorrowing({
+                      ...newBorrowing,
+                      book: books[e.target.value as unknown as number].id,
+                    })
+                  }
+                >
+                  <option selected={true} disabled={true}>
+                    Choose book
+                  </option>
+                  {books.map((book, i) => (
+                    <option key={i} value={i}>
+                      {book.title}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+              <Col>
+                {" "}
+                <Form.Select
+                  value={newBorrowing.book_status_start}
+                  onChange={(e) =>
+                    setNewBorrowing({
+                      ...newBorrowing,
+                      book_status_start: e.target
+                        .value as unknown as BookStatus,
+                    })
+                  }
+                >
+                  <option value={BookStatus.Excellent}>Excellent</option>
+                  <option value={BookStatus.Good}>Good</option>
+                  <option value={BookStatus.Satisfactory}>Satisfactory</option>
+                  <option value={BookStatus.Unsatisfactory}>
+                    Unsatisfactory
+                  </option>
+                </Form.Select>
+              </Col>
+              <Col>
+                {!isTeacher ? (
+                  <Form.Control
+                    type="text"
+                    value={newBorrowing.required_return_date as string}
+                    onChange={(e) =>
+                      setNewBorrowing({
+                        ...newBorrowing,
+                        required_return_date: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  ""
+                )}
+              </Col>
+              <Col>
+                <Button
+                  variant="primary"
+                  onClick={() =>
+                    createBorrowing(
+                      isTeacher,
+                      card,
+                      newBorrowing.book as number,
+                      newBorrowing.book_status_start as BookStatus,
+                      newBorrowing.required_return_date as string,
+                      librarian.id
+                    ).then(() => setUpdate({}))
+                  }
+                >
+                  Borrow
+                </Button>
+              </Col>
+            </Row>
+          </Container>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeWindow}>
@@ -195,6 +299,55 @@ async function returnBook(
       }
     );
   }
+}
+
+async function createBorrowing(
+  isTeacher: boolean,
+  card: number,
+  book: number,
+  startStatus: BookStatus,
+  requiredReturnDate: string,
+  librarian: number
+): Promise<void> {
+  if (isTeacher) {
+    await fetch(`${import.meta.env.VITE_SERVER_URL}/teachers-borrowing`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: 0,
+        teacher_card: card,
+        librarian: librarian,
+        book: book,
+        book_status_start: startStatus,
+        book_status_finish: null,
+        borrow_date: new Date().toISOString().split("T")[0],
+        return_date: null,
+      }),
+    });
+  } else {
+    await fetch(`${import.meta.env.VITE_SERVER_URL}/students-borrowing`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: 0,
+        student_card: card,
+        librarian: librarian,
+        book: book,
+        book_status_start: startStatus,
+        book_status_finish: null,
+        borrow_date: new Date().toISOString().split("T")[0],
+        return_date: null,
+        required_return_date: requiredReturnDate,
+      }),
+    });
+  }
+}
+
+async function getBooks(): Promise<Book[]> {
+  const booksRes = await fetch(`${import.meta.env.VITE_SERVER_URL}/book`);
+  const books = (await booksRes.json()) as Book[];
+
+  return books;
 }
 
 export default BorrowingWindow;
