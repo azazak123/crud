@@ -5,7 +5,6 @@ import LibraryService from "./components/libraryService";
 import { Tab, Tabs } from "react-bootstrap";
 
 function App() {
-
   return (
     <>
       <Tabs
@@ -13,6 +12,8 @@ function App() {
         id="fill-tab-example"
         className="mb-3"
         fill
+        mountOnEnter={true}
+        unmountOnExit={true}
       >
         <Tab eventKey="crud" title="Crud">
           <EntityTable />
