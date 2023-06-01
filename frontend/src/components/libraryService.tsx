@@ -14,25 +14,29 @@ function LibraryService() {
   return (
     <>
       <LibrarianChooser callback={setLibrarian} />
-      <Tabs
-        defaultActiveKey="table"
-        id="fill-tab-example"
-        className="mb-3"
-        fill
-      >
-        <Tab eventKey="students" title="Students">
-          <StudentTable />
-        </Tab>
-        <Tab eventKey="teachers" title="Teachers">
-          <TeacherTable />
-        </Tab>
-        <Tab eventKey="books" title="Books">
-          <BookTable />
-        </Tab>
-        <Tab eventKey="cards" title="Cards">
-          <CardTable />
-        </Tab>
-      </Tabs>
+      {librarian ? (
+        <Tabs
+          defaultActiveKey="table"
+          id="fill-tab-example"
+          className="mb-3"
+          fill
+        >
+          <Tab eventKey="students" title="Students">
+            <StudentTable />
+          </Tab>
+          <Tab eventKey="teachers" title="Teachers">
+            <TeacherTable />
+          </Tab>
+          <Tab eventKey="books" title="Books">
+            <BookTable />
+          </Tab>
+          <Tab eventKey="cards" title="Cards">
+            <CardTable librarian={librarian as Librarian} />
+          </Tab>
+        </Tabs>
+      ) : (
+        ""
+      )}
     </>
   );
 }

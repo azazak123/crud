@@ -18,6 +18,9 @@ function LibrarianChooser({ callback }: Props) {
       <Form.Select
         onChange={(e) => callback(librarians.get(e.target.value) as Librarian)}
       >
+        <option selected={true} disabled={true}>
+          Choose librarian
+        </option>
         {Array.from(librarians.values()).map((librarian) => (
           <option
             value={`${librarian.lastname} ${librarian.name} ${librarian.surname}`}
